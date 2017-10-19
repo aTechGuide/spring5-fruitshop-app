@@ -1,0 +1,45 @@
+# Java Maven CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2
+jobs:
+  build:
+    working_directory: ~/spring5-fruitshop-app
+    docker:
+      - image: circleci/openjdk:8-jdk
+
+    environment:
+      MAVEN_OPTS: -Xmx3200m
+    
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - spring5-fruitshop-app-{{ checksum "pom.xml" }}
+          - v1-dependencies-
+
+      - run: mvn dependency:go-offline
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: spring5-fruitshop-app-{{ checksum "pom.xml" }}
+
+      - run: mvn install surefire-report:report-only site -DgenerateReports=false cobertura:cobertura
+
+      - store_test_results:
+          path: target/surefire-reports
+
+      - store_artifacts:
+          path: target/spring5-recipe-app-0.0.1.jar
+
+      - store_artifacts:
+          path: target/site
+      
+      - run: 
+          name: Send to Codecov
+          command: bash <(curl -s https://codecov.io/bash)    
+
+
