@@ -46,7 +46,7 @@ public class CategoryServiceImplTest {
     public void getCategoryByName() throws Exception {
 
         String kamran = "Kamran";
-        
+
         Category category = new Category();
         category.setId(1L);
 
