@@ -3,6 +3,7 @@ package in.kamranali.fruitshop.serices;
 import in.kamranali.fruitshop.api.v1.mapper.CategoryMapper;
 import in.kamranali.fruitshop.api.v1.model.CategoryDTO;
 import in.kamranali.fruitshop.repositories.CategoryRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 /**
  * Created by bornshrewd on 20/10/17
  */
+@Service
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryMapper categoryMapper;
