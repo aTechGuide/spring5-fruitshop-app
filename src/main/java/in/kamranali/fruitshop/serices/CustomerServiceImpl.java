@@ -2,6 +2,7 @@ package in.kamranali.fruitshop.serices;
 
 import in.kamranali.fruitshop.api.v1.mapper.CustomerMapper;
 import in.kamranali.fruitshop.api.v1.model.CustomerDTO;
+import in.kamranali.fruitshop.domain.Customer;
 import in.kamranali.fruitshop.repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +42,17 @@ public class CustomerServiceImpl implements CustomerService {
                 .findById(id)
                 .map(customerMapper::customerToCustomerDTO)
                 .orElseThrow(RuntimeException::new);
+    }
+
+    @Override
+    public CustomerDTO createNewCustomer(CustomerDTO customerDTO) {
+
+        Customer customer = customerMapper.customerDTOToCustomer(customerDTO);
+
+        Customer customerSaved = customerRepository.save(customer);
+
+        CustomerDTO returnCustomerDTO = customerMapper.customerToCustomerDTO(customerSaved);
+        returnCustomerDTO.setCustomerUrl("/api/v1/customer/" + customerSaved.getId());
+        return returnCustomerDTO;
     }
 }

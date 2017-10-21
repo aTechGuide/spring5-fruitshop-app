@@ -21,6 +21,8 @@ import static org.junit.Assert.*;
  */
 public class CustomerServiceImplTest {
 
+    public static final String KAMRAN = "Kamran";
+
     @Mock
     CustomerRepository customerRepository;
 
@@ -48,17 +50,33 @@ public class CustomerServiceImplTest {
     @Test
     public void getCustomerById() throws Exception {
 
-        String kamran = "Kamran";
-
         Customer customer = new Customer();
         customer.setId(1L);
-        customer.setFirstname(kamran);
+        customer.setFirstname(KAMRAN);
 
         Mockito.when(customerRepository.findById(Mockito.anyLong())).thenReturn(Optional.ofNullable(customer));
 
         CustomerDTO customerDTO = customerService.getCustomerById(1L);
 
-        assertEquals(kamran, customerDTO.getFirstname());
+        assertEquals(KAMRAN, customerDTO.getFirstname());
+    }
+
+    @Test
+    public void createNewCustomer() throws Exception {
+
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstname(KAMRAN);
+
+        Customer customer = new Customer();
+        customer.setFirstname(customerDTO.getFirstname());
+        customer.setId(1L);
+
+        Mockito.when(customerRepository.save(Mockito.any(Customer.class))).thenReturn(customer);
+
+        CustomerDTO savedDTO = customerService.createNewCustomer(customerDTO);
+
+        assertEquals(customerDTO.getFirstname(), savedDTO.getFirstname());
+        assertEquals("/api/v1/customer/1", savedDTO.getCustomerUrl());
     }
 
 }
