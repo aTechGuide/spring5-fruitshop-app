@@ -20,6 +20,8 @@ import java.util.List;
 import static in.kamranali.fruitshop.controllers.v1.AbstractRestControllerTest.asJsonString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -141,6 +143,17 @@ public class CustomerControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstname", equalTo(KAMRAN)))
                 .andExpect(jsonPath("$.customer_url", equalTo("/api/v1/customers/1")));
+
+    }
+
+    @Test
+    public void deleteCustomer() throws Exception {
+
+        mockMvc.perform(delete("/api/v1/customers/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(customerService).deleteCustomerById(anyLong());
 
     }
 }

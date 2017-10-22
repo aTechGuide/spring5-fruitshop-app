@@ -64,7 +64,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDTO patchCustomer(Long id, CustomerDTO customerDTO) {
+    public CustomerDTO  patchCustomer(Long id, CustomerDTO customerDTO) {
         return customerRepository.findById(id).map(customer -> {
 
             if(customerDTO.getFirstname() != null){
@@ -80,6 +80,11 @@ public class CustomerServiceImpl implements CustomerService {
             return returnDTO;
 
         }).orElseThrow(RuntimeException::new);
+    }
+
+    @Override
+    public void deleteCustomerById(Long id) {
+        customerRepository.deleteById(id);
     }
 
     private CustomerDTO saveAndReturnDTO(Customer customer) {
