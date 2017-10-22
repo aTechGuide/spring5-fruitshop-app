@@ -2,6 +2,7 @@ package in.kamranali.fruitshop.serices;
 
 import in.kamranali.fruitshop.api.v1.mapper.CustomerMapper;
 import in.kamranali.fruitshop.api.v1.model.CustomerDTO;
+import in.kamranali.fruitshop.controllers.v1.CustomerController;
 import in.kamranali.fruitshop.domain.Customer;
 import in.kamranali.fruitshop.repositories.CustomerRepository;
 import org.junit.Before;
@@ -79,7 +80,7 @@ public class CustomerServiceImplTest {
         CustomerDTO savedDTO = customerService.createNewCustomer(customerDTO);
 
         assertEquals(customerDTO.getFirstname(), savedDTO.getFirstname());
-        assertEquals("/api/v1/customer/1", savedDTO.getCustomerUrl());
+        assertEquals(CustomerController.BASE_URL + "/1", savedDTO.getCustomerUrl());
     }
 
     @Test
@@ -97,7 +98,7 @@ public class CustomerServiceImplTest {
         CustomerDTO savedDTO = customerService.saveCustomerByDTO(1L, customerDTO);
 
         assertEquals(customerDTO.getFirstname(), savedDTO.getFirstname());
-        assertEquals("/api/v1/customer/1", savedDTO.getCustomerUrl());
+        assertEquals(CustomerController.BASE_URL + "/1", savedDTO.getCustomerUrl());
     }
 
     @Test

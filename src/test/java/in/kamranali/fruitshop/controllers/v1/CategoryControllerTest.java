@@ -48,7 +48,7 @@ public class CategoryControllerTest {
 
         Mockito.when(categoryService.getAllCategories()).thenReturn(categories);
 
-        mockMvc.perform(get("/api/v1/categories/")
+        mockMvc.perform(get(CategoryController.BASE_URL)
         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.categories", Matchers.hasSize(3)));
@@ -62,7 +62,7 @@ public class CategoryControllerTest {
 
         Mockito.when(categoryService.getCategoryByName(Mockito.anyString())).thenReturn(categoryDTO);
 
-        mockMvc.perform(get("/api/v1/categories/kamran")
+        mockMvc.perform(get(CategoryController.BASE_URL + "/kamran")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.equalTo("kamran")));
