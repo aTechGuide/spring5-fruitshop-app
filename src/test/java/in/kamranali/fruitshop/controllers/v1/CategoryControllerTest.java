@@ -1,8 +1,10 @@
 package in.kamranali.fruitshop.controllers.v1;
 
 import in.kamranali.fruitshop.api.v1.model.CategoryDTO;
+import in.kamranali.fruitshop.controllers.RestResponseEntityExceptionHandler;
 import in.kamranali.fruitshop.domain.Category;
 import in.kamranali.fruitshop.serices.CategoryService;
+import in.kamranali.fruitshop.serices.ResourceNotFoundException;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +42,8 @@ public class CategoryControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(categoryController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(categoryController)
+                .setControllerAdvice(new RestResponseEntityExceptionHandler()).build();
     }
     @Test
     public void getallCategories() throws Exception {
@@ -66,6 +69,17 @@ public class CategoryControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.equalTo("kamran")));
+    }
+
+    @Test
+    public void getCategoryByNameNotFound() throws Exception {
+
+        Mockito.when(categoryService.getCategoryByName(Mockito.anyString())).thenThrow(ResourceNotFoundException.class);
+
+        mockMvc.perform(get(CategoryController.BASE_URL + "/kamran")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+
     }
 
 }

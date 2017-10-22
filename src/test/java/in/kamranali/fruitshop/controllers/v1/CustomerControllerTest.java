@@ -1,7 +1,9 @@
 package in.kamranali.fruitshop.controllers.v1;
 
 import in.kamranali.fruitshop.api.v1.model.CustomerDTO;
+import in.kamranali.fruitshop.controllers.RestResponseEntityExceptionHandler;
 import in.kamranali.fruitshop.serices.CustomerService;
+import in.kamranali.fruitshop.serices.ResourceNotFoundException;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +50,8 @@ public class CustomerControllerTest {
 
         MockitoAnnotations.initMocks(this);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(customerController)
+                .setControllerAdvice(new RestResponseEntityExceptionHandler()).build();
     }
 
     @Test
@@ -154,6 +157,17 @@ public class CustomerControllerTest {
                 .andExpect(status().isOk());
 
         verify(customerService).deleteCustomerById(anyLong());
+
+    }
+
+    @Test
+    public void getCustomerNotFound() throws Exception {
+
+        when(customerService.getCustomerById(Mockito.anyLong())).thenThrow(ResourceNotFoundException.class);
+
+        mockMvc.perform(get(CustomerController.BASE_URL + "/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
 
     }
 }
