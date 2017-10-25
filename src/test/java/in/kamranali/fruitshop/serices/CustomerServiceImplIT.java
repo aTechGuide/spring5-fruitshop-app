@@ -7,6 +7,7 @@ import in.kamranali.fruitshop.bootstrap.Bootstrap;
 import in.kamranali.fruitshop.domain.Customer;
 import in.kamranali.fruitshop.repositories.CategoryRepository;
 import in.kamranali.fruitshop.repositories.CustomerRepository;
+import in.kamranali.fruitshop.repositories.VendorRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,12 +36,15 @@ public class CustomerServiceImplIT {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Autowired
+    VendorRepository vendorRepository;
+
     CustomerService customerService;
 
     @Before
     public void setUp() throws Exception {
 
-        Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository);
+        Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository, vendorRepository);
         bootstrap.run();
 
         customerService = new CustomerServiceImpl(CustomerMapper.INSTANCE, customerRepository);
